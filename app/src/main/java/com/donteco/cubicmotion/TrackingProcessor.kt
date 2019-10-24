@@ -24,7 +24,11 @@ class TrackingProcessor(
             MessageSender.sendMessage(
                 dataHolder.serverIp,
                 dataHolder.serverPort,
-                "${dataHolder.deviceId}:$value"
+                "{" +
+                        "\"appName\":\"PhonesPosition\"," +
+                        "\"id\":${dataHolder.deviceId}," +
+                        " \"inPlace\":$value" +
+                        "}"
             )
             broadcaster.sendBroadcast(
                 Intent(BROADCAST_ACTION).apply {

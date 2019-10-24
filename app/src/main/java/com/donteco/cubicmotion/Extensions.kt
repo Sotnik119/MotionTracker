@@ -1,10 +1,10 @@
 package com.donteco.cubicmotion
 
-import android.app.Activity
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 
-private fun Activity.hideSystemUI() {
+fun AppCompatActivity.hideSystemUI() {
     val decorView: View = window.decorView
     decorView.systemUiVisibility = (
             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -29,7 +29,6 @@ inline fun <reified T> String.fromJson(): T? =
         e.printStackTrace()
         null
     }
-
 
 
 class Position(

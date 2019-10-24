@@ -20,9 +20,6 @@ class MainActivity : AppCompatActivity() {
     val currentPosition: Position = Position(null, null)
     lateinit var dataHolder: DataHolder
 
-    lateinit var savedPosition: Position
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -65,9 +62,6 @@ class MainActivity : AppCompatActivity() {
 
 
         btn_calibrate.setOnClickListener {
-            //            savedPosition = Position(currentPosition.AccPosition, currentPosition.GyroPosition)
-//            startTracking()
-//            stopService(Intent(this, TrackingService::class.java))
             try {
                 dataHolder.deviceId =
                     if (device_id.text.isNullOrEmpty()) 0 else device_id.text.toString().toInt()
@@ -97,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
         class StatusBroadcastReceiver : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                intent?.getBooleanExtra("Status", false)!!.let {
+                intent?.getBooleanExtra("Status", false)?.let {
                     setIndicator(it)
                 }
             }
@@ -107,6 +101,8 @@ class MainActivity : AppCompatActivity() {
 
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(StatusBroadcastReceiver(), statusIntentFilter)
+
+        hideSystemUI()
 
     }
 
