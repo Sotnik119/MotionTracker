@@ -21,7 +21,7 @@ class DataHolder(context: Context) {
         set(value) = prefs.edit().putString("lastSavedPosition", value.toJson()).apply()
 
     var timeOut: Long
-        get() = prefs.getLong("timeOut", 0L)
+        get() = prefs.getLong("timeOut", 1L)
         set(value) {
             prefs.edit().putLong("timeOut", value).apply()
         }
@@ -39,13 +39,13 @@ class DataHolder(context: Context) {
         }
 
     var serverIp: String
-        get() = prefs.getString("serverIp", "")!!
+        get() = prefs.getString("serverIp", "192.168.0.1")!!
         set(value) {
             prefs.edit().putString("serverIp", value).apply()
         }
 
     var serverPort: Int
-        get() = prefs.getInt("serverPort", 0)
+        get() = prefs.getInt("serverPort", 6666)
         set(value) {
             prefs.edit().putInt("serverPort", value).apply()
         }

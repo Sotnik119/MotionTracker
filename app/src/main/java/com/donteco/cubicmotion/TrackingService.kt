@@ -13,10 +13,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.*
-import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
-import java.util.*
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 class TrackingService : Service() {
 
@@ -24,6 +21,7 @@ class TrackingService : Service() {
     lateinit var sensorManager: SensorManager
     lateinit var accelerometer: Sensor
     lateinit var trackingProcessor: TrackingProcessor
+    lateinit var broadcaster: LocalBroadcastManager
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -39,9 +37,9 @@ class TrackingService : Service() {
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        trackingProcessor = TrackingProcessor(dataHolder)
+        broadcaster = LocalBroadcastManager.getInstance(this)
 
-
+        trackingProcessor = TrackingProcessor(dataHolder,broadcaster)
         sensorManager.registerListener(
             trackingProcessor.accelerateListener,
             accelerometer,
@@ -116,7 +114,7 @@ class TrackingService : Service() {
             .setContentTitle("Cubic Tracking System")
             .setContentText("Service is working.")
             .setContentIntent(resultPendingIntent)
-//            .setSmallIcon(R.drawable.logo_not)
+            .setSmallIcon(R.drawable.ic_notify)
             .setChannelId(channelID)
             .setAutoCancel(true)
             .build()

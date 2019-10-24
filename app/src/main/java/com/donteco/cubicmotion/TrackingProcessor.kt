@@ -1,14 +1,18 @@
 package com.donteco.cubicmotion
 
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.util.Log
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.util.*
 import kotlin.math.absoluteValue
 
-class TrackingProcessor(val dataHolder: DataHolder) {
+class TrackingProcessor(
+    val dataHolder: DataHolder,
+    val broadcaster: LocalBroadcastManager
+) {
 
     val currentPosition: Position = Position(null, null)
     var savedPosition: Position = dataHolder.lastSavedPosition
@@ -16,13 +20,18 @@ class TrackingProcessor(val dataHolder: DataHolder) {
 
     private var state: Boolean = true
         set(value) {
-            if (field != value) {
-                MessageSender.sendMessage(
-                    dataHolder.serverIp,
-                    dataHolder.serverPort,
-                    "${dataHolder.deviceId}:$value"
-                )
-            }
+//            if (field != value) {
+            MessageSender.sendMessage(
+                dataHolder.serverIp,
+                dataHolder.serverPort,
+                "${dataHolder.deviceId}:$value"
+            )
+            broadcaster.sendBroadcast(
+                Intent(BROADCAST_ACTION).apply {
+                    putExtra("Status", value)
+                }
+            )
+//            }
             field = value
         }
 

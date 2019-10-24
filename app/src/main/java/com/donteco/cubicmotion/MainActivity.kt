@@ -1,18 +1,18 @@
 package com.donteco.cubicmotion
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.hardware.Sensor
-import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-import kotlin.concurrent.timer
-import kotlin.math.absoluteValue
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         display_ip.setText(dataHolder.serverIp)
         display_port.setText(dataHolder.serverPort.toString())
         sens_seek_bar.progress = (100 - dataHolder.sensivity * 100).toInt()
-        delay.setText(dataHolder.timeOut.toString())
+        delay.setText((dataHolder.timeOut / 1000).toString())
         //interface -
 
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 dataHolder.serverIp = display_ip.text.toString()
                 dataHolder.serverPort = display_port.text.toString().toInt()
                 dataHolder.sensivity = 1F - (sens_seek_bar.progress.toFloat() / 100)
-                dataHolder.timeOut = delay.text.toString().toLong()
+                dataHolder.timeOut = delay.text.toString().toLong() * 1000
 
                 dataHolder.lastSavedPosition = currentPosition
                 startService(
@@ -94,8 +94,32 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+        class StatusBroadcastReceiver : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.getBooleanExtra("Status", false)!!.let {
+                    setIndicator(it)
+                }
+            }
+        }
+
+        val statusIntentFilter = IntentFilter(BROADCAST_ACTION)
+
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(StatusBroadcastReceiver(), statusIntentFilter)
+
     }
 
+    fun setIndicator(pos: Boolean) {
+        indicator.setBackgroundColor(
+            if (pos)
+                resources.getColor(R.color.green)
+            else
+                resources.getColor(R.color.red)
+        )
+    }
 
 }
+
+
 
