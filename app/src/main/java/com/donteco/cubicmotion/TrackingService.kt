@@ -11,6 +11,7 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,6 +23,7 @@ class TrackingService : Service() {
     lateinit var accelerometer: Sensor
     lateinit var trackingProcessor: TrackingProcessor
     lateinit var broadcaster: LocalBroadcastManager
+    lateinit var wakeLock: PowerManager.WakeLock
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -39,7 +41,7 @@ class TrackingService : Service() {
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         broadcaster = LocalBroadcastManager.getInstance(this)
 
-        trackingProcessor = TrackingProcessor(dataHolder,broadcaster)
+        trackingProcessor = TrackingProcessor(dataHolder, broadcaster)
         sensorManager.registerListener(
             trackingProcessor.accelerateListener,
             accelerometer,
@@ -62,6 +64,15 @@ class TrackingService : Service() {
 
             trackingProcessor.restart()
 
+            wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK,
+                    "MotionTracker::MotionWakelockTag"
+                ).apply {
+                    acquire()
+                }
+            }
+
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -72,6 +83,7 @@ class TrackingService : Service() {
     override fun onDestroy() {
         Log.d("Service", "Stop")
         trackingProcessor.stopTracking()
+        wakeLock.release()
         super.onDestroy()
     }
 
