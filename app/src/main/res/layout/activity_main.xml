@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    sothree:umanoPanelHeight="45dp"
+    sothree:umanoPanelHeight="100dp"
     sothree:umanoShadowHeight="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -140,51 +140,82 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="100dp"
             android:gravity="center"
             android:text="Settings"
-            android:textSize="12sp" />
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/ic_launcher_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="15">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Sensitivity" />
+
+            <SeekBar
+                android:id="@+id/sens_seek_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="12" />
+
+        </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="10dp"
             android:weightSum="15">
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="13"
+                android:layout_weight="2"
                 android:text="IP" />
 
             <EditText
                 android:id="@+id/display_ip"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:inputType="textUri" />
+                android:layout_weight="13"
+                android:inputType="number"
+                android:digits="0123456789."/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="10dp"
             android:weightSum="15">
 
             <TextView
                 android:id="@+id/textView44"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="13"
+                android:layout_weight="2"
                 android:text="Port" />
+
 
             <EditText
                 android:id="@+id/display_port"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="13"
                 android:inputType="number" />
         </LinearLayout>
 
@@ -193,56 +224,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="10dp"
             android:weightSum="15">
 
             <TextView
-                android:id="@+id/textView444"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="12"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:text="device id" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/device_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:inputType="number" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+
+            <!--        <EditText-->
+            <!--            android:id="@+id/device_id"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_weight="3"-->
+            <!--            android:inputType="number" />-->
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="10dp"
             android:weightSum="15">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="12"
-                android:text="delay (s)" />
-
-            <EditText
-                android:id="@+id/delay"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:inputType="number" />
+                android:text="delay (s)" />
+
+            <Spinner
+                android:id="@+id/delay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Sensitivity"
-            android:textSize="12sp" />
-
-        <SeekBar
-            android:id="@+id/sens_seek_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp" />
+            android:layout_height="50dp" />
     </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

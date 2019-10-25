@@ -10,6 +10,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -21,18 +22,43 @@ class MainActivity : AppCompatActivity() {
     val currentPosition: Position = Position(null, null)
     lateinit var dataHolder: DataHolder
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         dataHolder = DataHolder(this)
 
+        val data = arrayOf("1", "2", "3", "4", "5")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, data)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+
+        device_id.adapter = adapter
+        delay.adapter = adapter
+
+
+        // устанавливаем обработчик нажатия
+//        device_id.onItemSelectedListener = object : OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>, view: View,
+//                position: Int, id: Long
+//            ) {
+//                // показываем позиция нажатого элемента
+//                Toast.makeText(baseContext, "Position = $position", Toast.LENGTH_SHORT).show()
+//            }
+//
+//            override fun onNothingSelected(arg0: AdapterView<*>) {}
+//        }
+
         //interface +
-        device_id.setText(dataHolder.deviceId.toString())
+        device_id.setSelection(dataHolder.deviceId - 1)
+        delay.setSelection((dataHolder.timeOut / 1000).toInt() - 1)
+        device_id.adapter
         display_ip.setText(dataHolder.serverIp)
         display_port.setText(dataHolder.serverPort.toString())
         sens_seek_bar.progress = (100 - dataHolder.sensivity * 100).toInt()
-        delay.setText((dataHolder.timeOut / 1000).toString())
         //interface -
 
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -64,12 +90,12 @@ class MainActivity : AppCompatActivity() {
 
         btn_calibrate.setOnClickListener {
             try {
-                dataHolder.deviceId =
-                    if (device_id.text.isNullOrEmpty()) 0 else device_id.text.toString().toInt()
+                dataHolder.deviceId = (device_id.selectedItemId + 1).toInt()
+
                 dataHolder.serverIp = display_ip.text.toString()
                 dataHolder.serverPort = display_port.text.toString().toInt()
                 dataHolder.sensivity = 1F - (sens_seek_bar.progress.toFloat() / 100)
-                dataHolder.timeOut = delay.text.toString().toLong() * 1000
+                dataHolder.timeOut = (delay.selectedItemId+1)*1000
 
                 dataHolder.lastSavedPosition = currentPosition
 

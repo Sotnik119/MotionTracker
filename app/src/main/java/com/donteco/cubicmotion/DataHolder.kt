@@ -27,13 +27,13 @@ class DataHolder(context: Context) {
         }
 
     var sensivity: Float
-        get() = prefs.getFloat("sensivity", 0F)
+        get() = prefs.getFloat("sensivity", 0.5F)
         set(value) {
             prefs.edit().putFloat("sensivity", value).apply()
         }
 
     var deviceId: Int
-        get() = prefs.getInt("deviceId", 0)
+        get() = prefs.getInt("deviceId", 1)
         set(value) {
             prefs.edit().putInt("deviceId", value).apply()
         }
