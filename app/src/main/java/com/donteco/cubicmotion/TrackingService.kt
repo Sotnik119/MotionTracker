@@ -77,7 +77,7 @@ class TrackingService : Service() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onDestroy() {
@@ -85,6 +85,20 @@ class TrackingService : Service() {
         trackingProcessor.stopTracking()
         wakeLock.release()
         super.onDestroy()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        Log.d("Service", "Task removed")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(
+                Intent(this, TrackingService::class.java)
+            )
+        } else {
+            startService(
+                Intent(this, TrackingService::class.java)
+            )
+        }
+        super.onTaskRemoved(rootIntent)
     }
 
     private fun createNotificationChannel(id: String, name: String, description: String) {

@@ -8,6 +8,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -71,13 +72,24 @@ class MainActivity : AppCompatActivity() {
                 dataHolder.timeOut = delay.text.toString().toLong() * 1000
 
                 dataHolder.lastSavedPosition = currentPosition
-                startService(
-                    Intent(this, TrackingService::class.java)
-                        .putExtra(
-                            "newStartPoint",
-                            currentPosition.toJson()
-                        )
-                )
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(
+                        Intent(this, TrackingService::class.java)
+                            .putExtra(
+                                "newStartPoint",
+                                currentPosition.toJson()
+                            )
+                    )
+                } else {
+                    startService(
+                        Intent(this, TrackingService::class.java)
+                            .putExtra(
+                                "newStartPoint",
+                                currentPosition.toJson()
+                            )
+                    )
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
