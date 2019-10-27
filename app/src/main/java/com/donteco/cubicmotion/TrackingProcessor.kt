@@ -14,9 +14,10 @@ class TrackingProcessor(
     val broadcaster: LocalBroadcastManager
 ) {
 
+    private var mTimer = Timer()
     val currentPosition: Position = Position(null, null)
-    var savedPosition: Position = dataHolder.lastSavedPosition
-    var sens = dataHolder.sensivity
+    private lateinit var savedPosition: Position
+    private var sens: Float = 1F
 
     private var state: Boolean = true
         set(value) {
@@ -44,19 +45,16 @@ class TrackingProcessor(
         override fun onAccuracyChanged(sensor: Sensor, acc: Int) {}
 
         override fun onSensorChanged(event: SensorEvent) {
-//            val x = event.values[0]
-//            val y = event.values[1]
-//            val z = event.values[2]
-
             currentPosition.AccPosition =
                 event.values.asList().subList(0, 3).toTypedArray()
         }
     }
 
 
-    private var mTimer = Timer()
-
     private fun startTracking() {
+        sens = 1F - (dataHolder.sensivity.toFloat() / 100)
+        savedPosition = dataHolder.lastSavedPosition
+
         Log.d("TrackingProcessor", "Start tracking: sens:$sens, timeout:${dataHolder.timeOut}!")
         val task = object : TimerTask() {
             override fun run() {
@@ -70,7 +68,7 @@ class TrackingProcessor(
             }
         }
 
-        mTimer.scheduleAtFixedRate(task, 2000, dataHolder.timeOut)
+        mTimer.scheduleAtFixedRate(task, 2000, dataHolder.timeOut * 1000)
     }
 
     fun stopTracking() {
@@ -81,7 +79,6 @@ class TrackingProcessor(
 
     fun restart() {
         stopTracking()
-        sens = dataHolder.sensivity
         startTracking()
     }
 

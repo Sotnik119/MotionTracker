@@ -26,10 +26,10 @@ class DataHolder(context: Context) {
             prefs.edit().putLong("timeOut", value).apply()
         }
 
-    var sensivity: Float
-        get() = prefs.getFloat("sensivity", 0.5F)
+    var sensivity: Int
+        get() = prefs.getInt("sensivity", 50)
         set(value) {
-            prefs.edit().putFloat("sensivity", value).apply()
+            prefs.edit().putInt("sensivity", value).apply()
         }
 
     var deviceId: Int

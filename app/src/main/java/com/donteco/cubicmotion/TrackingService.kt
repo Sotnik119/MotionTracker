@@ -55,12 +55,12 @@ class TrackingService : Service() {
         try {
             sendNotification()
 
-            intent.extras?.getString("newStartPoint")?.let {
-                val pos = it.fromJson<Position>()
-                pos?.let { position ->
-                    trackingProcessor.savedPosition = position
-                }
-            }
+//            intent.extras?.getString("newStartPoint")?.let {
+//                val pos = it.fromJson<Position>()
+//                pos?.let { position ->
+//                    trackingProcessor.savedPosition = position
+//                }
+//            }
 
             trackingProcessor.restart()
 
